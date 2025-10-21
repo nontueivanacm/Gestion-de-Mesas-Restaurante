@@ -54,10 +54,10 @@ void altaMesa(){
     fwrite(&m, sizeof(Mesa), 1, archivo);
     fclose(archivo);
 
-    cout<<"Mesa registrada.";
+    cout<<"Mesa registrada.\n";
 }
 
-int mostrarMesas(){
+void mostrarMesas(){
     FILE* archivo = fopen("mesas.dat","rb");
     if (archivo == NULL) {
         cout <<"No se pudo abrir el archivo.\n";
@@ -68,9 +68,9 @@ int mostrarMesas(){
     cout << "LISTADO DE MESAS\n";
     while (fread(&m, sizeof(Mesa), 1, archivo) == 1) {
     cout << "Mesa número: " << m.numero_mesa << endl;
-    cout << "Está libre?: " << m.esta_libre? "Sí": "No" << ednl;
+    cout << "Está libre?: " << (m.esta_libre? "Sí": "No") << endl;
     cout << "Ganancia acumulada: " << m.ganancia_acumulada << endl;
-    cout << "__________________________\n";
+    cout << "_----------------------\n";
     }
     fclose(archivo);
 }
@@ -115,31 +115,35 @@ void bajaMesa() {
         cout << "Mesa no encontrada.\n";
 }
 
-void modificarMesa(int numeroBuscado, int nuevoNumero, bool nuevoEstado, int nuevaGanancia) {
+void modificarMesa() {
     FILE* archivo = fopen("mesas.dat", "rb+");
     if (archivo != NULL) {
-        Mesa mesa;
+        int numeroBuscado;
+        cout << "Ingrese el número de mesa a modificar: ";
+        cin >> numeroBuscado;
+        Mesa m;
         bool encontrado = false;
 
-        while (!encontrado && fread(&mesa, sizeof(Mesa), 1, archivo) == 1) {
-            if (mesa.numero == numeroBuscado) {
+        while (!encontrado && fread(&m, sizeof(Mesa), 1, archivo) == 1) {
+            if (m.numero_mesa == numeroBuscado) {
                 encontrado = true;
 
                 cout << "Mesa encontrada\n";
-                cout << "Número actual: " << mesa.numero << endl;
-                cout << "Estado actual: " << (mesa.libre ? "Libre" : "Ocupada") << endl;
-                cout << "Ganancia actual: $" << mesa.ganancia << endl;
+                cout << "Número actual: " << m.numero_mesa << endl;
+                cout << "Estado actual: " << (m.esta_libre ? "Libre" : "Ocupada") << endl;
+                cout << "Ganancia actual: $" << m.ganancia_acumulada << endl;
 
                 cout << "\nIngrese el nuevo número: ";
-                cin >> mesa.numero;
+                cin >> m.numero_mesa;
                 cout << "¿Está libre? (1=Sí, 0=No): ";
-                cin >> mesa.libre;
+                cin >> m.esta_libre;
                 cout << "Ingrese la nueva ganancia acumulada: ";
-                cin >> mesa.ganancia;
+                cin >> m.ganancia_acumulada;
                 
                 fseek(archivo, -sizeof(Mesa), SEEK_CUR);
-                fwrite(&mesa, sizeof(Mesa), 1, archivo);
+                fwrite(&m, sizeof(Mesa), 1, archivo);
                 cout << "Mesa modificada." << endl;
+                break;
             }
         }
 
@@ -157,10 +161,11 @@ int main() {
     int opcion;
 
     do {
-        cout << "\n=== CONFIGURADOR DE MESAS ===\n";
+        cout << "\n=== REGISTRO DE MESAS ===\n";
         cout << "1. Alta de mesa\n";
         cout << "2. Baja de mesa\n";
         cout << "3. Mostrar mesas\n";
+        cout << "4. Modificar mesa\n";
         cout << "0. Salir\n";
         cout << "Opcion: ";
         cin >> opcion;
@@ -169,10 +174,10 @@ int main() {
             case 1: altaMesa(); break;
             case 2: bajaMesa(); break;
             case 3: mostrarMesas(); break;
+            case 4: modificarMesa(); break;
+            case 0: cout << "Fin del programa.\n"; break;
+            default: cout << "Opción inválida.\n"; break;
         }
-
-    } while (opcion != 0);
-
-    cout << "Fin del programa.\n";
+    }while (opcion != 0);
     return 0;
 }
