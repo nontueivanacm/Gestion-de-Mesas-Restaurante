@@ -19,6 +19,7 @@ struct Mesa {
 
 void altaMesa();
 void bajaMesa();
+void modificarMesa();
 void mostrarMesas();
 
 void altaMesa(){
@@ -30,8 +31,23 @@ void altaMesa(){
     }
 
     Mesa m;
-    cout<< "Número de mesa:";
+    cout<< "Ingrese número de mesa:";
     cin>>m.numero_mesa;
+
+    FILE* check = fopen("mesas.dat", "rb");
+    if (check != NULL) {
+        Mesa temp;
+        while (fread(&temp, sizeof(Mesa), 1, check) == 1) {
+            if (temp.numero_mesa == m.numero_mesa) {
+                cout << "Ya existe una mesa con ese número.\n";
+                fclose(check);
+                fclose(archivo);
+                return;
+            }
+        }
+        fclose(check);
+    }
+
     m.esta_libre = true;
     m.ganancia_acumulada = 0;
 
@@ -49,11 +65,12 @@ int mostrarMesas(){
     }
 
     Mesa m;
-    cout << "LISTADO DE MESAS";
+    cout << "LISTADO DE MESAS\n";
     while (fread(&m, sizeof(Mesa), 1, archivo) == 1) {
-    cout << "Mesa número: " << m.numero_mesa << \n;
-    cout << "Está libre?: " << m.esta_libre? "Sí": "No" << \n;
-    cout << "Edad: " << estudiante.edad << \n;
+    cout << "Mesa número: " << m.numero_mesa << endl;
+    cout << "Está libre?: " << m.esta_libre? "Sí": "No" << ednl;
+    cout << "Ganancia acumulada: " << m.ganancia_acumulada << endl;
+    cout << "__________________________\n";
     }
     fclose(archivo);
 }
@@ -73,7 +90,7 @@ void bajaMesa() {
     }
 
     int numero;
-    cout << "Numero de mesa a eliminar: \n";
+    cout << "Número de mesa a eliminar: \n";
     cin >> numero;
 
     Mesa m;
@@ -88,48 +105,53 @@ void bajaMesa() {
 
     fclose(archivo);
     fclose(temp);
+
     remove("mesas.dat");
     rename("temp.dat", "mesas.dat");
 
     if (eliminado)
-        cout << "Mesa eliminada correctamente.\n";
+        cout << "Mesa eliminada.\n";
     else
         cout << "Mesa no encontrada.\n";
 }
 
-void modifMesa(int numero_mesa, int nuevaEdad) {
+void modificarMesa(int numeroBuscado, int nuevoNumero, bool nuevoEstado, int nuevaGanancia) {
     FILE* archivo = fopen("mesas.dat", "rb+");
     if (archivo != NULL) {
-    Mesa mesa;
-    bool encontrada = false;
-    while (!encontrada && fread(&mesa, sizeof(Mesa), 1, archivo) == 1) {
-    if (numero_mesa == mesaBuscada) {
-    encontrada = true;
-    numero_mesa = nuevoNum;
-    fseek(archivo, -sizeof(Mesa), SEEK_CUR);
-    fwrite(&mesa, sizeof(Mesa), 1, archivo);
-    cout << "Número de mesa actualizado." << endl;
-    }
-    }
-    if (!encontrada) {
-    cout << "No se encontró una mesa con ese número." << endl;
-    }
-    fclose(archivo);
+        Mesa mesa;
+        bool encontrado = false;
+
+        while (!encontrado && fread(&mesa, sizeof(Mesa), 1, archivo) == 1) {
+            if (mesa.numero == numeroBuscado) {
+                encontrado = true;
+
+                cout << "Mesa encontrada\n";
+                cout << "Número actual: " << mesa.numero << endl;
+                cout << "Estado actual: " << (mesa.libre ? "Libre" : "Ocupada") << endl;
+                cout << "Ganancia actual: $" << mesa.ganancia << endl;
+
+                cout << "\nIngrese el nuevo número: ";
+                cin >> mesa.numero;
+                cout << "¿Está libre? (1=Sí, 0=No): ";
+                cin >> mesa.libre;
+                cout << "Ingrese la nueva ganancia acumulada: ";
+                cin >> mesa.ganancia;
+                
+                fseek(archivo, -sizeof(Mesa), SEEK_CUR);
+                fwrite(&mesa, sizeof(Mesa), 1, archivo);
+                cout << "Mesa modificada." << endl;
+            }
+        }
+
+        if (!encontrado) {
+            cout << "No se encontró una mesa con ese número." << endl;
+        }
+
+        fclose(archivo);
     } else {
-    cout << "No se pudo abrir el archivo para lectura y escritura." << endl;
+        cout << "No se pudo abrir el archivo para lectura y escritura." << endl;
     }
 }
-int main() {
-    int codigoBuscado, nuevaEdad;
-    cout << "Ingrese el código del estudiante a buscar: ";
-    cin >> codigoBuscado;
-    cout << "Ingrese la nueva edad: ";
-    cin >> nuevaEdad;
-    editarEdadEstudiante(codigoBuscado, nuevaEdad);
-    return 0;
-}
-
-
 
 int main() {
     int opcion;
