@@ -31,7 +31,7 @@ void altaMesa(){
     }
 
     Mesa m;
-    cout<< "Ingrese número de mesa:";
+    cout<< "Ingrese numero de mesa:";
     cin>>m.numero_mesa;
 
     FILE* check = fopen("mesas.dat", "rb");
@@ -67,8 +67,8 @@ void mostrarMesas(){
     Mesa m;
     cout << "LISTADO DE MESAS\n";
     while (fread(&m, sizeof(Mesa), 1, archivo) == 1) {
-    cout << "Mesa número: " << m.numero_mesa << endl;
-    cout << "Está libre?: " << (m.esta_libre? "Sí": "No") << endl;
+    cout << "Mesa numero: " << m.numero_mesa << endl;
+    cout << "Esta libre?: " << (m.esta_libre? "Sí": "No") << endl;
     cout << "Ganancia acumulada: " << m.ganancia_acumulada << endl;
     cout << "_----------------------\n";
     }
@@ -90,7 +90,7 @@ void bajaMesa() {
     }
 
     int numero;
-    cout << "Número de mesa a eliminar: \n";
+    cout << "Numero de mesa a eliminar: \n";
     cin >> numero;
 
     Mesa m;
@@ -148,7 +148,7 @@ void modificarMesa() {
         }
 
         if (!encontrado) {
-            cout << "No se encontró una mesa con ese número." << endl;
+            cout << "No existe esa mesa." << endl;
         }
 
         fclose(archivo);
@@ -161,7 +161,7 @@ int main() {
     int opcion;
 
     do {
-        cout << "\n=== REGISTRO DE MESAS ===\n";
+        cout << "\n----- REGISTRO DE MESAS -----\n";
         cout << "1. Alta de mesa\n";
         cout << "2. Baja de mesa\n";
         cout << "3. Mostrar mesas\n";
@@ -169,6 +169,13 @@ int main() {
         cout << "0. Salir\n";
         cout << "Opcion: ";
         cin >> opcion;
+
+         if (!(cin >> opcion)) {
+            cout << "Entrada inválida. Por favor ingrese un número.\n";
+            cin.clear();
+            cin.ignore(10000, '\n');
+            continue;
+        }
 
         switch (opcion) {
             case 1: altaMesa(); break;
