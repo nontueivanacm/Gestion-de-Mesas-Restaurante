@@ -12,7 +12,7 @@
 #include <cstring> 
 using namespace std;
 
-struct mesa{
+struct Mesa{
       int numero_mesa;
       bool esta_libre;
       int ganancia_acumulada;
@@ -56,15 +56,13 @@ void agregarMesa (Nodo*& lista, Nodo* nuevo) {
 Nodo* cargarDesdeArchivo (){
   FILE* archivo = fopen ("mesas.dat", "rb");
   if (archivo == NULL) {
-      cout << "No se pudo abrir mesas.dat. ya que no hay mesas guardadas.\n";
+      cout << "No se pudo abrir mesas.dat, ya que no hay mesas guardadas.\n";
       return NULL;
   }
 
   Nodo* lista = NULL;
-  struct MesaTemp {
     Mesa m;
-  };
-  while (fread(&m, sizeof(MesaTemp), 1, archivo) ==1) {
+  while (fread(&m, sizeof(Mesa), 1, archivo) ==1) {
       Nodo* nuevo = crearNodo (m.numero_mesa, m.esta_libre, m.ganancia_acumulada);
       agregarMesa (lista, nuevo);
   }
@@ -97,7 +95,11 @@ void guardarEnArchivo(Nodo* lista) {
   }
   Nodo* aux = lista;
   while (aux != NULL) { 
-      fwrite (aux, sizeof(int) + sizeof(bool) + sizeof(int), 1, archivo);
+      Mesa m;
+      m.numero_mesa = aux->numero_mesa;
+      m.esta_libre = aux->esta_libre;
+      m.ganancia_acumulada = aux->ganancia_acumulada;
+      fwrite(&m, sizeof(Mesa), 1, archivo);
       aux = aux -> siguiente;
   }
   fclose(archivo);
