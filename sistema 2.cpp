@@ -1,0 +1,118 @@
+// Sistema 2
+// 1. Se carga una lista de mesas al iniciar el programa.
+// Se usan las funciones del sistema 1 y se procede a:
+// Recibir nuevos clientes (si hay mesas libres entonces se asigna una. Si todas están ocupadas, se agrega a una **cola de espera**)
+// Liberar mesas:
+//  - Se actualiza la ganancia acumulada y se marca como libre.
+// - Si hay clientes esperando, se asigna automáticamente al primero.
+// Guardar cambios al archivo mesas.dat antes de salir.
+
+#include <iostream>
+#include <string>
+#include <cstdio> // para abrir, leer y escribir archivos
+using namespace std;
+
+struct mesa{
+       int numero_mesa;
+       bool esta_libre;
+       int ganancia_acumulada;
+};
+
+struct Nodo {
+    int numero_mesa;
+    bool esta_libre;
+    int ganancia_acumulada;
+    Nodo* siguiente;
+};
+
+Nodo* crarNodo (int num, bool libre, int ganancia);
+void agregarMesa (Nodo*& lista, Nodo* nuevo);
+void mostrarMesas(Nodo* lista);
+void liberarLista(Nodo*& lista);
+Nodo* cargarDesdeArchivo();
+void guardarEnArchivo(Nodo* lista);
+
+Nodo* crarNodo (int num, bool libre, int ganancia) {
+  Nodo* nuevo = new Nodo;
+  nuevo -> numero_mesa = num;
+  nuevo -> esta_libre = libre;
+  nuevo -> ganancia_acumulada = ganancia;
+  nuevo -> siguiente = NULL;
+  return nuevo;
+};
+
+void agregarMesa (Nodo*& lista, Nodo* nuevo) {
+  if (lista == NULL) {
+      lista = nuevo;
+  } else {
+    Nodo* aux = lista;
+    while (aux -> siguiente != NULL) {
+         aux = aux -> siguiente;
+    }
+    aux -> siguiente = nuevo;
+  } 
+};
+
+Nodo* cargarDesdeArchivo (){
+  FILE* archivo = fopen ("mesas.dat", "rb");
+  if (archivo == NULL) {
+     return NULL;
+  }
+
+  Nodo* lista = NULL;
+  struct MesaTemp {
+    int numero_mesa;
+    bool esta_libre;
+    int ganancia_acumulada;
+  } m;
+  while (fread(&m, sizeof(MesaTemp), 1, archivo) ==1) {
+      Ndod* nuevo = crearNodo (m.nemero_mesa, m.esta_libre, m.ganancia_acumulada);
+      agregarMesa (lista, nuevo);
+  }
+
+  fclose(archivo);
+  cout << "Mesas cargadas desde mesas.dat\n";
+  return lista;
+};
+
+void mostrarMesas(Nodo* lista) {
+    if (lista == NULL) {
+      cout << "Nohay mesas cargadas.\n";
+      return;
+    }
+    cout << "\n--- LISTADO DE MESAS ---\n";
+    Nodo* aux = lista;
+    while (aux! = NULL) {
+         cout << "Mesa: " << aux ->numero_mesa
+              << " | Estado: " << (aux -> esta_libre ? "Libre" : "Ocupada")
+              << " | Ganancia: $" << aux -> ganancia_acumulada << endl; 
+               aux = aux -> siguiente;
+    }
+}
+
+void guardarEnArchivo(Nodo* lista) {
+  FILE* archivo = fopen("mesas.dat", "wb");
+  if (archivo == NULL) {
+     cout << "Error al abrir mesas.dat para guardar.\n";
+     return;
+  }
+  Nodo* aux = lista;
+  while (aux != NULL) { 
+       fwrite (aux, sizeof(int) + sizeof(bool) + sizeof(int), 1, archivo);
+       aux = aux -> siguiente;
+  }
+  fclose(archivo);
+  cout << "Mesas guardadas correctamente en mesas.dat\n";
+}
+
+void liberarLista(Nodo*& lista) {
+  Nodo* aux;
+  while (lista != NULL) {
+     aux = lista;
+     lista = lista -> siguiente;
+     delete aux;
+  }
+}
+
+
+
