@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <string>
-#include <cstdio> // para abrir, leer y escribir archivos
+#include <cstring> // para abrir, leer y escribir archivos
 using namespace std;
 
 struct mesa{
