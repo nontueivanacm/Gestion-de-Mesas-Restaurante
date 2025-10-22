@@ -13,26 +13,26 @@
 using namespace std;
 
 struct mesa{
-       int numero_mesa;
-       bool esta_libre;
-       int ganancia_acumulada;
+      int numero_mesa;
+      bool esta_libre;
+      int ganancia_acumulada;
 };
 
 struct Nodo {
-    int numero_mesa;
-    bool esta_libre;
-    int ganancia_acumulada;
-    Nodo* siguiente;
+      int numero_mesa;
+      bool esta_libre;
+      int ganancia_acumulada;
+      Nodo* siguiente;
 };
 
-Nodo* crarNodo (int num, bool libre, int ganancia);
+Nodo* crearNodo (int num, bool libre, int ganancia);
 void agregarMesa (Nodo*& lista, Nodo* nuevo);
 void mostrarMesas(Nodo* lista);
 void liberarLista(Nodo*& lista);
 Nodo* cargarDesdeArchivo();
 void guardarEnArchivo(Nodo* lista);
 
-Nodo* crarNodo (int num, bool libre, int ganancia) {
+Nodo* crearNodo (int num, bool libre, int ganancia) {
   Nodo* nuevo = new Nodo;
   nuevo -> numero_mesa = num;
   nuevo -> esta_libre = libre;
@@ -47,7 +47,7 @@ void agregarMesa (Nodo*& lista, Nodo* nuevo) {
   } else {
     Nodo* aux = lista;
     while (aux -> siguiente != NULL) {
-         aux = aux -> siguiente;
+          aux = aux -> siguiente;
     }
     aux -> siguiente = nuevo;
   } 
@@ -56,50 +56,49 @@ void agregarMesa (Nodo*& lista, Nodo* nuevo) {
 Nodo* cargarDesdeArchivo (){
   FILE* archivo = fopen ("mesas.dat", "rb");
   if (archivo == NULL) {
-     return NULL;
+      cout << "No se pudo abrir mesas.dat. ya que no hay mesas guardadas.\n";
+      return NULL;
   }
 
   Nodo* lista = NULL;
   struct MesaTemp {
-    int numero_mesa;
-    bool esta_libre;
-    int ganancia_acumulada;
-  } m;
+    Mesa m;
+  };
   while (fread(&m, sizeof(MesaTemp), 1, archivo) ==1) {
-      Ndod* nuevo = crearNodo (m.nemero_mesa, m.esta_libre, m.ganancia_acumulada);
+      Nodo* nuevo = crearNodo (m.numero_mesa, m.esta_libre, m.ganancia_acumulada);
       agregarMesa (lista, nuevo);
   }
 
   fclose(archivo);
   cout << "Mesas cargadas desde mesas.dat\n";
   return lista;
-};
+}
 
 void mostrarMesas(Nodo* lista) {
     if (lista == NULL) {
-      cout << "Nohay mesas cargadas.\n";
+      cout << "No hay mesas cargadas.\n";
       return;
     }
     cout << "\n--- LISTADO DE MESAS ---\n";
     Nodo* aux = lista;
-    while (aux! = NULL) {
-         cout << "Mesa: " << aux ->numero_mesa
+    while (aux != NULL) {
+        cout << "Mesa: " << aux ->numero_mesa
               << " | Estado: " << (aux -> esta_libre ? "Libre" : "Ocupada")
               << " | Ganancia: $" << aux -> ganancia_acumulada << endl; 
-               aux = aux -> siguiente;
+              aux = aux -> siguiente;
     }
 }
 
 void guardarEnArchivo(Nodo* lista) {
   FILE* archivo = fopen("mesas.dat", "wb");
   if (archivo == NULL) {
-     cout << "Error al abrir mesas.dat para guardar.\n";
-     return;
+    cout << "Error al abrir mesas.dat para guardar.\n";
+    return;
   }
   Nodo* aux = lista;
   while (aux != NULL) { 
-       fwrite (aux, sizeof(int) + sizeof(bool) + sizeof(int), 1, archivo);
-       aux = aux -> siguiente;
+      fwrite (aux, sizeof(int) + sizeof(bool) + sizeof(int), 1, archivo);
+      aux = aux -> siguiente;
   }
   fclose(archivo);
   cout << "Mesas guardadas correctamente en mesas.dat\n";
@@ -108,9 +107,9 @@ void guardarEnArchivo(Nodo* lista) {
 void liberarLista(Nodo*& lista) {
   Nodo* aux;
   while (lista != NULL) {
-     aux = lista;
-     lista = lista -> siguiente;
-     delete aux;
+    aux = lista;
+    lista = lista -> siguiente;
+    delete aux;
   }
 }
 
