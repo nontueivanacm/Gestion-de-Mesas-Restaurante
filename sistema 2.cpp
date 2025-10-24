@@ -198,6 +198,8 @@ void recibirCliente(Nodo*& lista, ClienteEnEspera*& frenteCola, ClienteEnEspera*
   }
   proximoIdCliente++; //incrementar 1 para el numero del proximo cliente
 }
+
+void liberarMesa();
 int main(){
   ClienteEnEspera* frenteCola = nullptr;
   ClienteEnEspera* Finalcola = nullptr;
