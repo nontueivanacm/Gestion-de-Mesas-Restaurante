@@ -39,10 +39,12 @@ void liberarLista(Nodo*& lista);
 Nodo* cargarDesdeArchivo();
 void guardarEnArchivo(Nodo* lista);
 
+// Declaraciones de funciones para cola
 bool colaEstaVacia();
 void encolar();
 int desencolar();
 
+// Declaracion de funciones de patrones algoritmicos del sistema
 void recibirCliente(Nodo*& lista);
 void liberarMesa(Nodo*& lista);
 
@@ -170,6 +172,32 @@ int desencolar(ClienteEnEspera*& frente, ClienteEnEspera*& final){
   return idValor;
 }
 
+void recibirCliente(Nodo*& lista, ClienteEnEspera*& frenteCola, ClienteEnEspera*& fondoCola){
+  if (lista == nullptr)
+  {
+    cout <<"Todavia no hay mesas cargadas en el sistema"<< endl;
+    return;
+  }
+  
+  // inicializamos
+  Nodo* actual = lista;
+  bool mesaEncontrada = false;
+
+  while (actual != nullptr && !mesaEncontrada)
+  {
+    if(actual->esta_libre){ // esta libre?
+      actual ->esta_libre = false; //asignar mesa
+      mesaEncontrada = true;
+    }
+    actual = actual->siguiente;
+  }
+
+  //Ahora logica para por si no se encontro mesa, se encole el cliente
+  if(!mesaEncontrada){
+    encolar(frenteCola, fondoCola, proximoIdCliente);
+  }
+  proximoIdCliente++; //incrementar 1 para el numero del proximo cliente
+}
 int main(){
   ClienteEnEspera* frenteCola = nullptr;
   ClienteEnEspera* Finalcola = nullptr;
