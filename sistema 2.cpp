@@ -25,12 +25,28 @@ struct Nodo {
       Nodo* siguiente;
 };
 
+struct ClienteEnEspera {
+  int idcliente;
+  ClienteEnEspera* siguiente;
+};
+
+int proximoIdCliente = 1;
+
 Nodo* crearNodo (int num, bool libre, int ganancia);
 void agregarMesa (Nodo*& lista, Nodo* nuevo);
 void mostrarMesas(Nodo* lista);
 void liberarLista(Nodo*& lista);
 Nodo* cargarDesdeArchivo();
 void guardarEnArchivo(Nodo* lista);
+
+bool colaEstaVacia();
+void encolar();
+int desencolar();
+
+void recibirCliente(Nodo*& lista);
+void liberarMesa(Nodo*& lista);
+
+
 
 Nodo* crearNodo (int num, bool libre, int ganancia) {
   Nodo* nuevo = new Nodo;
@@ -115,5 +131,46 @@ void liberarLista(Nodo*& lista) {
   }
 }
 
+// Funciones de la Cola
 
+bool colaEstaVacia(ClienteEnEspera* frenteCola){
+  return (frenteCola == nullptr);
+}
 
+ClienteEnEspera* crearCliente(int id){
+  ClienteEnEspera* nuevoCliente = new ClienteEnEspera;
+  nuevoCliente->idcliente=id;
+  nuevoCliente->siguiente=nullptr;
+  return nuevoCliente;
+}
+
+void encolar(ClienteEnEspera*& frente, ClienteEnEspera*& final, int id){
+  ClienteEnEspera* nuevoCliente = crearCliente(id);
+  if (final == nullptr)
+  { 
+    frente = final = nuevoCliente;
+  }else{
+    final->siguiente = nuevoCliente;
+    final = nuevoCliente;
+  }
+}
+
+int desencolar(ClienteEnEspera*& frente, ClienteEnEspera*& final){
+  if(frente ==  nullptr){
+    return -1;
+  }
+  int idValor = frente ->idcliente;
+  ClienteEnEspera* temp = frente;
+  frente = frente ->siguiente;
+  if (frente == nullptr)
+  {
+    final=nullptr;
+  }
+  delete temp;
+  return idValor;
+}
+
+int main(){
+  ClienteEnEspera* frenteCola = nullptr;
+  ClienteEnEspera* Finalcola = nullptr;
+}
