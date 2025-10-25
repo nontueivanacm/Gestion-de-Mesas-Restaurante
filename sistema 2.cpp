@@ -236,6 +236,7 @@ void liberarMesa(Nodo*& lista, ClienteEnEspera*& frenteCola, ClienteEnEspera*& f
   }
   
 }
+
 int main(){
   Nodo* listaMesas = cargarDesdeArchivo();
 
@@ -274,7 +275,7 @@ int main(){
                 guardarEnArchivo(listaMesas);
                 break;
             case 3:
-                recibirCliente(listaMesas, frenteCola, finalCola                                                                                                                                                                                                                                                                Cola);
+                recibirCliente(listaMesas, frenteCola, finalCola);                                                                                                                                                                                                                                                            
                 break;
             case 4:
                 liberarMesa(listaMesas, frenteCola, finalCola);
@@ -291,5 +292,4 @@ int main(){
 
     guardarEnArchivo(listaMesas); // Persistencia de datos
     liberarLista(listaMesas);     // Liberación de memoria de la Lista Enlazada
-    return 0;
-}
+    return 0;}

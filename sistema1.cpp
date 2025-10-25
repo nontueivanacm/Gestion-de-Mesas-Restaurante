@@ -25,17 +25,17 @@ void altaMesa(){
 
     FILE*archivo=fopen("mesas.dat", "ab");
     if (archivo == NULL) {
-        cout << "\n";
-        cout <<"No se pudo abrir el archivo.\n";
+        cout <<"\nNo se pudo abrir el archivo.\n";
         return;
     }
 
     Mesa m;
-    cout << "\n";
-    cout<< "Ingrese numero de mesa:";
-    cin>>m.numero_mesa;
+    cout << "\nIngrese numero de mesa: \n";
+    while (!(cin >> m.numero_mesa)) {
+    cout << "\nEntrada invalida. Ingrese un numero valido:\n";
     cin.clear();
     cin.ignore(10000, '\n');
+}
 
     FILE* check = fopen("mesas.dat", "rb");
     if (check != NULL) {
@@ -100,10 +100,12 @@ void bajaMesa() {
     }
 
     int numero;
-    cout << "Numero de mesa a eliminar: \n";
-    cin >> numero;
+    cout << "Numero de mesa a eliminar: ";
+    while (!(cin >> numero)) {
+    cout << "Entrada invalida. Ingrese un numero valido: ";
     cin.clear();
     cin.ignore(10000, '\n');
+}
 
     Mesa m;
     bool eliminado = false;
@@ -131,11 +133,14 @@ void modificarMesa() {
     FILE* archivo = fopen("mesas.dat", "rb+");
     if (archivo != NULL) {
         int numeroBuscado;
-        cout << "\n";
+
         cout << "Ingrese el numero de mesa a modificar: ";
-        cin >> numeroBuscado;
-        cin.clear();
-        cin.ignore(10000, '\n');
+
+    while (!(cin >> numeroBuscado)) {
+    cout << "Entrada invalida. Ingrese un numero valido: ";
+    cin.clear();
+    cin.ignore(10000, '\n');
+}
         Mesa m;
         bool encontrado = false;
 
@@ -144,6 +149,8 @@ void modificarMesa() {
             encontrado = true;
 
             int opcionMod;
+            cout << "Elija una opcion: ";
+
             do {
                 cout << "\nMesa encontrada:\n";
                 cout << "\n";
@@ -156,22 +163,41 @@ void modificarMesa() {
                 cout << "0. Guardar y salir\n";
                 cout << "\n";
                 cout << "Elija una opcion: ";
-                cin >> opcionMod;
                 cout << "\n";
+
+                while (!(cin >> opcionMod)) {
+                cout << "Entrada invalida. Ingrese un numero valido: ";
+                cin.clear();
+                cin.ignore(10000, '\n');
+                }
 
                 switch(opcionMod) {
                     case 1:
-                        cout << "Nuevo numero de mesa: ";
-                        cin >> m.numero_mesa;
-                        break;
-                    case 2:
-                        cout << "Nuevo estado (1=Libre, 0=Ocupada): ";
-                        cin >> m.esta_libre;
-                        break;
-                    case 3:
-                        cout << "Nueva ganancia acumulada: ";
-                        cin >> m.ganancia_acumulada;
-                        break;
+                    cout << "Nuevo numero de mesa: ";
+                    while (!(cin >> m.numero_mesa)) {
+                    cout << "Entrada invalida. Ingrese un numero valido: ";
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                }
+                break;
+
+                case 2:
+                cout << "Nuevo estado (1=Libre, 0=Ocupada): ";
+                while (!(cin >> m.esta_libre)) {
+                cout << "Entrada invalida. Ingrese 1 o 0: ";
+                cin.clear();
+                cin.ignore(10000, '\n');
+                }
+                break;
+
+                case 3:
+                cout << "Nueva ganancia acumulada: ";
+                while (!(cin >> m.ganancia_acumulada)) {
+                cout << "Entrada invalida. Ingrese un numero valido: ";
+                cin.clear();
+                cin.ignore(10000, '\n');
+                }
+                break;
                     case 0:
                         break;
                     default:
