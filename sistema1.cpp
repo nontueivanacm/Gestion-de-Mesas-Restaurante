@@ -8,7 +8,6 @@
 // numero_mesa (int) esta_libre (bool) ganancia_acumulada(int)
 
 #include <iostream>
-#include <cstring>
 using namespace std;
 
 struct Mesa {
@@ -26,20 +25,24 @@ void altaMesa(){
 
     FILE*archivo=fopen("mesas.dat", "ab");
     if (archivo == NULL) {
+        cout << "\n";
         cout <<"No se pudo abrir el archivo.\n";
         return;
     }
 
     Mesa m;
+    cout << "\n";
     cout<< "Ingrese numero de mesa:";
     cin>>m.numero_mesa;
+    cin.clear();
+    cin.ignore(10000, '\n');
 
     FILE* check = fopen("mesas.dat", "rb");
     if (check != NULL) {
         Mesa temp;
         while (fread(&temp, sizeof(Mesa), 1, check) == 1) {
             if (temp.numero_mesa == m.numero_mesa) {
-                cout << "Ya existe una mesa con ese número.\n";
+                cout << "Ya existe una mesa con ese numero.\n";
                 fclose(check);
                 fclose(archivo);
                 return;
@@ -53,24 +56,31 @@ void altaMesa(){
 
     fwrite(&m, sizeof(Mesa), 1, archivo);
     fclose(archivo);
-
+    cout << "\n";
     cout<<"Mesa registrada.\n";
 }
 
 void mostrarMesas(){
     FILE* archivo = fopen("mesas.dat","rb");
     if (archivo == NULL) {
+        cout << "\n";
         cout <<"No se pudo abrir el archivo.\n";
         return;
     }
 
     Mesa m;
-    cout << "LISTADO DE MESAS\n";
+    cout << "-----------LISTADO DE MESAS------------\n";
+    cout << "\n";
+    cout << "---------------------------------------\n";
     while (fread(&m, sizeof(Mesa), 1, archivo) == 1) {
+    cout << "\n";
     cout << "Mesa numero: " << m.numero_mesa << endl;
-    cout << "Esta libre?: " << (m.esta_libre? "Si": "No") << endl;
+    cout << "\n";
+    cout << "Estado de la mesa: " << (m.esta_libre? "Libre": "Ocupada") << endl;
+    cout << "\n";
     cout << "Ganancia acumulada: " << m.ganancia_acumulada << endl;
-    cout << "_----------------------\n";
+    cout << "\n";
+    cout << "---------------------------------------\n";
     }
     fclose(archivo);
 }
@@ -92,6 +102,8 @@ void bajaMesa() {
     int numero;
     cout << "Numero de mesa a eliminar: \n";
     cin >> numero;
+    cin.clear();
+    cin.ignore(10000, '\n');
 
     Mesa m;
     bool eliminado = false;
@@ -119,24 +131,33 @@ void modificarMesa() {
     FILE* archivo = fopen("mesas.dat", "rb+");
     if (archivo != NULL) {
         int numeroBuscado;
+        cout << "\n";
         cout << "Ingrese el numero de mesa a modificar: ";
         cin >> numeroBuscado;
+        cin.clear();
+        cin.ignore(10000, '\n');
         Mesa m;
         bool encontrado = false;
 
-         while (!encontrado && fread(&m, sizeof(Mesa), 1, archivo) == 1) {
+        while (!encontrado && fread(&m, sizeof(Mesa), 1, archivo) == 1) {
         if (m.numero_mesa == numeroBuscado) {
             encontrado = true;
 
             int opcionMod;
             do {
                 cout << "\nMesa encontrada:\n";
-                cout << "1. Numero de mesa (" << m.numero_mesa << ")\n";
-                cout << "2. Estado (Libre/Ocupada) (" << (m.esta_libre ? "Libre" : "Ocupada") << ")\n";
-                cout << "3. Ganancia acumulada (" << m.ganancia_acumulada << ")\n";
+                cout << "\n";
+                cout << "1. Numero de mesa:" << m.numero_mesa << "\n";
+                cout << "\n";
+                cout << "2. Estado de la mesa:" << (m.esta_libre ? "Libre" : "Ocupada") <<endl;
+                cout << "\n";
+                cout << "3. Ganancia acumulada:" << m.ganancia_acumulada << "\n";
+                cout << "\n";
                 cout << "0. Guardar y salir\n";
-                cout << "Ingrese el campo a modificar: ";
+                cout << "\n";
+                cout << "Elija una opcion: ";
                 cin >> opcionMod;
+                cout << "\n";
 
                 switch(opcionMod) {
                     case 1:
@@ -159,9 +180,9 @@ void modificarMesa() {
                 }
             } while(opcionMod != 0);
 
-            // Guardar los cambios en el archivo
             fseek(archivo, -sizeof(Mesa), SEEK_CUR);
             fwrite(&m, sizeof(Mesa), 1, archivo);
+            cout << "\n";
             cout << "Mesa modificada correctamente.\n";
             break;
         }
@@ -181,20 +202,27 @@ int main() {
     int opcion;
 
 do {
-    cout << "\n----- REGISTRO DE MESAS -----\n";
+    cout << "\n-----------REGISTRO DE MESAS------------\n";
+    cout << "\n";
     cout << "1. Alta de mesa\n";
+    cout << "\n";
     cout << "2. Baja de mesa\n";
+    cout << "\n";
     cout << "3. Mostrar mesas\n";
+    cout << "\n";
     cout << "4. Modificar mesa\n";
+    cout << "\n";
     cout << "0. Salir\n";
+    cout << "\n";
     cout << "Opcion: ";
 
-    // Leer y validar entrada EN UN SOLO PASO
-    if (!(cin >> opcion)) {           // <- aquí se lee la opción solo una vez
-        cout << "Entrada invalida. Por favor ingrese un numero.\n";
+//Para evitar crasheo del menu
+    if (!(cin >> opcion)) {
+        cout << "\n";
+        cout << "Entrada invalida. Por favor, ingrese otro numero.\n";
         cin.clear();
         cin.ignore(10000,'\n');
-        continue;                      // vuelve al inicio del menú
+        continue;
     }
 
     switch(opcion) {
