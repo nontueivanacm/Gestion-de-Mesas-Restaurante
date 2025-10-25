@@ -70,12 +70,8 @@ void mostrarMesas(){
 
     Mesa m;
     cout << "\n-----------LISTADO DE MESAS------------\n";
-    cout << "---------------------------------------\n";
     while (fread(&m, sizeof(Mesa), 1, archivo) == 1) {
-    cout << "\nMesa numero: " << m.numero_mesa << "\n";
-    cout << "\nEstado de la mesa: " << (m.esta_libre? "Libre": "Ocupada") << "\n";
-    cout << "\nGanancia acumulada: " << m.ganancia_acumulada << "\n";
-    cout << "\n---------------------------------------\n";
+    cout << "\nMesa numero: " << m.numero_mesa<< "| Estado de la mesa: " << (m.esta_libre? "Libre": "Ocupada")<< "| Ganancia acumulada: " << m.ganancia_acumulada << "\n";
     }
     fclose(archivo);
 }
