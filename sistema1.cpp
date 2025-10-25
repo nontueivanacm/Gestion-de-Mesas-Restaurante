@@ -60,10 +60,7 @@ void altaMesa(){
     cout<<"Mesa registrada.\n";
 }
 
-void leerYmostrarMesasOrd(){
-    Mesa m[10];
-    int len = 0;
-
+void mostrarMesas(){
     FILE* archivo = fopen("mesas.dat","rb");
     if (archivo == NULL) {
         cout << "\n";
@@ -71,21 +68,16 @@ void leerYmostrarMesasOrd(){
         return;
     }
 
-    while (fread(&m[len], sizeof(Mesa), 1, archivo) == 1 && len <10) {
-    len ++;
-    }
-    fclose(archivo);
-
-    //MostrarMesas
+    Mesa m;
     cout << "\n-----------LISTADO DE MESAS------------\n";
-    for (int i = 0; i < len - 1; i++) {
-        for (int i = 0; i < len; i++) {
     cout << "---------------------------------------\n";
-    cout << "\nMesa numero: " << m.numero_mesa[i] << "\n";
+    while (fread(&m, sizeof(Mesa), 1, archivo) == 1) {
+    cout << "\nMesa numero: " << m.numero_mesa << "\n";
     cout << "\nEstado de la mesa: " << (m.esta_libre? "Libre": "Ocupada") << "\n";
     cout << "\nGanancia acumulada: " << m.ganancia_acumulada << "\n";
-    cout << "---------------------------------------\n";
+    cout << "\n---------------------------------------\n";
     }
+    fclose(archivo);
 }
 
 void bajaMesa() {
