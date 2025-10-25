@@ -25,16 +25,14 @@ void altaMesa(){
 
     FILE*archivo=fopen("mesas.dat", "ab");
     if (archivo == NULL) {
-        cout << "\n";
-        cout <<"No se pudo abrir el archivo.\n";
+        cout <<"\nNo se pudo abrir el archivo.\n";
         return;
     }
 
     Mesa m;
-    cout << "\n";
-    cout << "Ingrese numero de mesa: ";
+    cout << "\nIngrese numero de mesa: \n";
     while (!(cin >> m.numero_mesa)) {
-    cout << "Entrada invalida. Ingrese un numero valido: ";
+    cout << "\nEntrada invalida. Ingrese un numero valido:\n";
     cin.clear();
     cin.ignore(10000, '\n');
 }
@@ -175,17 +173,31 @@ void modificarMesa() {
 
                 switch(opcionMod) {
                     case 1:
-                        cout << "Nuevo numero de mesa: ";
-                        cin >> m.numero_mesa;
-                        break;
-                    case 2:
-                        cout << "Nuevo estado (1=Libre, 0=Ocupada): ";
-                        cin >> m.esta_libre;
-                        break;
-                    case 3:
-                        cout << "Nueva ganancia acumulada: ";
-                        cin >> m.ganancia_acumulada;
-                        break;
+                    cout << "Nuevo numero de mesa: ";
+                    while (!(cin >> m.numero_mesa)) {
+                    cout << "Entrada invalida. Ingrese un numero valido: ";
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                }
+                break;
+
+                case 2:
+                cout << "Nuevo estado (1=Libre, 0=Ocupada): ";
+                while (!(cin >> m.esta_libre)) {
+                cout << "Entrada invalida. Ingrese 1 o 0: ";
+                cin.clear();
+                cin.ignore(10000, '\n');
+                }
+                break;
+
+                case 3:
+                cout << "Nueva ganancia acumulada: ";
+                while (!(cin >> m.ganancia_acumulada)) {
+                cout << "Entrada invalida. Ingrese un numero valido: ";
+                cin.clear();
+                cin.ignore(10000, '\n');
+                }
+                break;
                     case 0:
                         break;
                     default:
