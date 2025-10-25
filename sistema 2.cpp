@@ -172,7 +172,7 @@ int desencolar(ClienteEnEspera*& frente, ClienteEnEspera*& final){
   return idValor;
 }
 
-void recibirCliente(Nodo*& lista, ClienteEnEspera*& frenteCola, ClienteEnEspera*& fondoCola){
+void recibirCliente(Nodo*& lista, ClienteEnEspera*& frenteCola, ClienteEnEspera*& finalCola){
   if (lista == nullptr)
   {
     cout <<"Todavia no hay mesas cargadas en el sistema"<< endl;
@@ -194,7 +194,7 @@ void recibirCliente(Nodo*& lista, ClienteEnEspera*& frenteCola, ClienteEnEspera*
 
   //Ahora logica para por si no se encontro mesa, se encole el cliente
   if(!mesaEncontrada){
-    encolar(frenteCola, fondoCola, proximoIdCliente);
+    encolar(frenteCola, finalCola, proximoIdCliente);
   }
   proximoIdCliente++; //incrementar 1 para el numero del proximo cliente
 }
@@ -236,8 +236,60 @@ void liberarMesa(Nodo*& lista, ClienteEnEspera*& frenteCola, ClienteEnEspera*& f
   }
   
 }
+
 int main(){
+  Nodo* listaMesas = cargarDesdeArchivo();
+
+  if (listaMesas == NULL) {
+        cout << "No se encontraron mesas en mesas.dat.\n";
+        cout << "Primero usa el Sistema 1 para crearlas.\n";
+        return 0;
+  }
+
   ClienteEnEspera* frenteCola = nullptr;
   ClienteEnEspera* finalCola = nullptr;
   
-}
+  int opcion;
+    do {
+        cout << "\n=== SISTEMA DE GESTION DE RESTAURANTE (Sistema 2) ===\n";
+        cout << "1. Mostrar mesas\n";
+        cout << "2. Guardar cambios en archivo\n";
+        cout << "3. Recibir nuevo cliente (ASIGNAR/ENCOLAR)\n"; 
+        cout << "4. Liberar mesa y Reasignar cola (FIFO)\n";       
+        cout << "0. Salir\n";
+        cout << "Opcion: ";
+        
+        // Manejo de la entrada: lee la opción del menú
+        if (!(cin >> opcion)) {
+             // Si cin falla (ej: ingreso de letra), limpia el error y lo ignora
+             cin.clear();
+             cin.ignore(10000, '\n');
+             opcion = -1; // Fuerza una opción inválida para mostrar el mensaje por defecto
+        }
+
+        switch (opcion) {
+            case 1:
+                mostrarMesas(listaMesas);
+                break;
+            case 2:
+                guardarEnArchivo(listaMesas);
+                break;
+            case 3:
+                recibirCliente(listaMesas, frenteCola, finalCola);                                                                                                                                                                                                                                                            
+                break;
+            case 4:
+                liberarMesa(listaMesas, frenteCola, finalCola);
+                break;
+            case 0:
+                cout << "Fin del programa." << endl;
+                break;
+            default:
+                cout << "Opcion invalida." << endl;
+                break;
+        }
+
+    } while (opcion != 0);
+
+    guardarEnArchivo(listaMesas); // Persistencia de datos
+    liberarLista(listaMesas);     // Liberación de memoria de la Lista Enlazada
+    return 0;}
