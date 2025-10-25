@@ -238,6 +238,6 @@ void liberarMesa(Nodo*& lista, ClienteEnEspera*& frenteCola, ClienteEnEspera*& f
 }
 int main(){
   ClienteEnEspera* frenteCola = nullptr;
-  ClienteEnEspera* Finalcola = nullptr;
+  ClienteEnEspera* finalCola = nullptr;
   
 }
