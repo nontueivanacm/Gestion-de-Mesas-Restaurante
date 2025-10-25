@@ -199,8 +199,45 @@ void recibirCliente(Nodo*& lista, ClienteEnEspera*& frenteCola, ClienteEnEspera*
   proximoIdCliente++; //incrementar 1 para el numero del proximo cliente
 }
 
-void liberarMesa();
+void liberarMesa(Nodo*& lista, ClienteEnEspera*& frenteCola, ClienteEnEspera*& finalCola){
+  int numMesa, monto; // variables locales
+  cout << "Ingrese el numero de la mesa para liberar: ";
+  if (!(cin >> numMesa)) return;
+  cout << "Ingrese el monto consumido: ";
+  if(!(cin>>monto)) return;
+  
+  Nodo* actual = lista;
+  bool mesaEncontrada = false;
+
+  // busqueda
+  while(actual != nullptr && !mesaEncontrada){
+    if (actual->numero_mesa == numMesa){
+      if (actual->esta_libre)
+      {
+        cout << "la mesa numero: " << numMesa << " ya estaba libre" << endl;
+        return;
+      }
+      actual->ganancia_acumulada += monto;
+      actual->esta_libre = true;
+      cout << "mesa numero: " << numMesa << "LIBERADA, ganacia acumulada: " << actual->ganancia_acumulada << endl;
+      mesaEncontrada = true;
+      if (!colaEstaVacia(frenteCola)){
+        int idClienteReasignado = desencolar(frenteCola, finalCola);
+        actual->esta_libre = false;
+        cout << "cliente numero: " << idClienteReasignado << " REASIGNADO a la mesa numero: " << actual->numero_mesa << endl;
+      }
+      return;
+    }
+    actual = actual->siguiente;
+  }
+  if (!mesaEncontrada)
+  {
+    cout << "No se encontro la mesa numero: " << numMesa << endl;
+  }
+  
+}
 int main(){
   ClienteEnEspera* frenteCola = nullptr;
   ClienteEnEspera* Finalcola = nullptr;
+  
 }
