@@ -183,10 +183,11 @@ void recibirCliente(Nodo*& lista, ClienteEnEspera*& frenteCola, ClienteEnEspera*
   Nodo* actual = lista;
   bool mesaEncontrada = false;
 
-  while (actual != nullptr && !mesaEncontrada)
-  {
+  while (actual != nullptr && !mesaEncontrada){
     if(actual->esta_libre){ // esta libre?
       actual ->esta_libre = false; //asignar mesa
+      cout << "Cliente numero: " << proximoIdCliente 
+                 << " ASIGNADO a la Mesa: " << actual->numero_mesa << "." << endl;
       mesaEncontrada = true;
     }
     actual = actual->siguiente;
@@ -251,11 +252,11 @@ int main(){
   
   int opcion;
     do {
-        cout << "\n=== SISTEMA DE GESTION DE RESTAURANTE (Sistema 2) ===\n";
+        cout << "\n=== SISTEMA 2 DE GESTION DE RESTAURANTE ===\n";
         cout << "1. Mostrar mesas\n";
         cout << "2. Guardar cambios en archivo\n";
-        cout << "3. Recibir nuevo cliente (ASIGNAR/ENCOLAR)\n"; 
-        cout << "4. Liberar mesa y Reasignar cola (FIFO)\n";       
+        cout << "3. Recibir nuevo cliente\n"; 
+        cout << "4. Liberar mesa y Reasignar cola\n";       
         cout << "0. Salir\n";
         cout << "Opcion: ";
         
