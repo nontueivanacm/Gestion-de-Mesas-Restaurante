@@ -195,6 +195,7 @@ void recibirCliente(Nodo*& lista, ClienteEnEspera*& frenteCola, ClienteEnEspera*
 
   //Ahora logica para por si no se encontro mesa, se encole el cliente
   if(!mesaEncontrada){
+    cout << ">> ATENCIÓN: No hay mesas libres en este momento." << endl;
     encolar(frenteCola, finalCola, proximoIdCliente);
   }
   proximoIdCliente++; //incrementar 1 para el numero del proximo cliente
@@ -225,7 +226,7 @@ void liberarMesa(Nodo*& lista, ClienteEnEspera*& frenteCola, ClienteEnEspera*& f
       if (!colaEstaVacia(frenteCola)){
         int idClienteReasignado = desencolar(frenteCola, finalCola);
         actual->esta_libre = false;
-        cout << "cliente numero: " << idClienteReasignado << " REASIGNADO a la mesa numero: " << actual->numero_mesa << endl;
+        cout << "cliente numero: " << idClienteReasignado << " fue REASIGNADO a la mesa numero: " << actual->numero_mesa << endl;
       }
       return;
     }
